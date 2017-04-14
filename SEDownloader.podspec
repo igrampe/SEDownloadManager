@@ -38,5 +38,8 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
+  s.dependency 'REDownloadTasksQueue', '~> 1.1'
   s.dependency 'Realm', '~> 2.5.1'
+
+  s.frameworks = 'Realm', 'REDownloadTasksQueue'
 end
