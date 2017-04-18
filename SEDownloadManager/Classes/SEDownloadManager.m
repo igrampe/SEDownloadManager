@@ -12,6 +12,7 @@
 @import REDownloadTasksQueue;
 
 #import "SEResourceRLMObject.h"
+#import "SEResourceObject.h"
 #import "SEDownloadTasksQueue.h"
 
 @interface SEDownloadManager () <REDownloadTasksQueueDelegate>
@@ -110,6 +111,21 @@
     return path;
 }
 
+- (void)saveResourceWithURL:(NSURL *)url localPath:(NSURL *)localPath {
+    SEResourceRLMObject *object = [SEResourceRLMObject new];
+    object.url = url.absoluteString;
+    object.localPath = localPath.absoluteString;
+    BOOL needCommitTransaction = YES;
+    if (self.realm.inWriteTransaction) {
+        needCommitTransaction = NO;
+        [self.realm beginWriteTransaction];
+    }
+    [self.realm addObject:object];
+    if (needCommitTransaction) {
+        [self.realm commitWriteTransaction];
+    }
+}
+
 #pragma mark - Public
 
 - (void)addResourceToQueueWithUrl:(NSString *)urlString {
@@ -124,6 +140,18 @@
         queue.started = YES;
         [queue start];
     }
+}
+
+- (id<SEResource>)resourceForUrl:(NSString *)urlString downloadIfNotExist:(BOOL)shouldDownload {
+    SEResourceObject *resource = nil;
+    RLMResults *objects = [SEResourceRLMObject objectsInRealm:self.realm where:@"url == %@", urlString];
+    SEResourceRLMObject *object = [objects firstObject];
+    if (object) {
+        resource = [SEResourceObject objectFromResource:object];
+    } else if (shouldDownload) {
+        [self addResourceToQueueWithUrl:urlString];
+    }
+    return resource;
 }
 
 #pragma mark - REDownloadTasksQueueDelegate
@@ -146,6 +174,7 @@
                 andStoredToURL:(NSURL *)storeURL
                   withProgress:(float) progress {
     NSLog(@"RE_downloaded: %@ %f", queue.userObject, progress);
+    [self saveResourceWithURL:downloadURL localPath:storeURL];
 }
 
 - (void)onREDownloadTasksQueue:(REDownloadTasksQueue *)queue

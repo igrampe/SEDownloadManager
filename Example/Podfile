@@ -1,6 +1,0 @@
-use_frameworks!
-target 'SEDownloader_Tests' do
-  pod 'SEDownloader', :path => '../'
-  
-  
-end

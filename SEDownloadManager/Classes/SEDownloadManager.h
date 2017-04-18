@@ -8,10 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol SEResource;
+
 @interface SEDownloadManager : NSObject
 
 + (instancetype)sharedManager;
 
 - (void)addResourceToQueueWithUrl:(NSString *)urlString;
+- (id<SEResource>)resourceForUrl:(NSString *)urlString downloadIfNotExist:(BOOL)shouldDownload;
 
 @end
