@@ -14,6 +14,7 @@
 @synthesize localPath;
 @synthesize type;
 @synthesize expiresAt;
+@synthesize totalFileSize;
 
 + (instancetype)objectFromResource:(id<SEResource>)resource {
     SEResourceObject *object = [SEResourceObject new];
@@ -21,6 +22,7 @@
     object.localPath = resource.localPath;
     object.type = resource.type;
     object.expiresAt = resource.expiresAt;
+    object.totalFileSize = resource.totalFileSize;
     
     return object;
 }

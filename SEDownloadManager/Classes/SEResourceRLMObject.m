@@ -14,6 +14,7 @@
 @synthesize localPath;
 @synthesize type;
 @synthesize expiresAt;
+@synthesize totalFileSize;
 
 + (instancetype)objectFromResource:(id<SEResource>)resource inRealm:(RLMRealm *)realm {
     BOOL needCommitTransaction = YES;
@@ -28,6 +29,7 @@
     object.localPath = resource.localPath;
     object.type = resource.type;
     object.expiresAt = resource.expiresAt;
+    object.totalFileSize = resource.totalFileSize;
     
     [realm addObject:object];
     

@@ -17,4 +17,6 @@
 @property (nonatomic, assign) SEResourceType type;
 @property (nonatomic, strong) NSDate *expiresAt;
 
+@property (nonatomic, assign) NSInteger totalFileSize;
+
 @end
